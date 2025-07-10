@@ -15,6 +15,6 @@ This repo holds the starter code for all Cirkit projects. Each folder matches a 
 
 ---
 
-Cirkit kits are built to help you learn electronics and coding by building real stuff. For support or updates, follow [CirkitDIY](https://instagram.com/cirkitdiy).
+Cirkit kits are built to help you learn electronics and coding by building real stuff. For support, please feel free to join our [Discord](https://discord.gg/R5VdCjTTk9).
 
 Happy building!
