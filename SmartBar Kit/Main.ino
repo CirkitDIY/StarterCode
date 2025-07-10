@@ -6,10 +6,8 @@
 const char* ssid = "YOUR_WIFI_NAME";
 const char* password = "YOUR_WIFI_PASSWORD";
 
-// 🖥️ LCD setup (Most common I2C address is 0x27)
 LiquidCrystal_I2C lcd(0x27, 16, 2);  // 16 chars, 2 rows
 
-// 🔁 Interval for updating the display (in milliseconds)
 const long updateInterval = 10000;
 unsigned long lastUpdate = 0;
 
@@ -40,17 +38,21 @@ void loop() {
     lastUpdate = millis();
 
     if (WiFi.status() == WL_CONNECTED) {
-      // ✅ TODO 1: Make an API request to get live weather
-      // Use HTTPClient + API URL (e.g., from weatherapi.com or openweathermap)
+      // ✅ TODO 1: Make an API request to WeatherAPI.com
+      // 1. Go to https://www.weatherapi.com/
+      // 2. Sign up and get your free API key
+      // 3. Construct a URL like:
+      // http://api.weatherapi.com/v1/current.json?key=YOUR_KEY&q=YOUR_CITY&aqi=no
+      //
       // Example:
       // HTTPClient http;
-      // http.begin("http://api.example.com/weather...");
+      // http.begin("http://api.weatherapi.com/v1/current.json?key=...&q=...&aqi=no");
       // int code = http.GET();
       // parse response...
 
-      // ✅ TODO 2: Parse JSON response to extract temperature and condition
-      // Use ArduinoJson library
-      // Display data on LCD with lcd.setCursor() and lcd.print()
+      // ✅ TODO 2: Use ArduinoJson to parse the JSON response
+      // Extract "temp_f" and "condition.text"
+      // Show them on the LCD
 
       // 📟 Placeholder display
       lcd.clear();
@@ -61,8 +63,7 @@ void loop() {
       delay(3000);
 
       // 🕒 BONUS: Show current time and date using NTP
-      // ✅ TODO 3: Set up NTP and display live time
-      // configTime(...), struct tm, localtime_r(), etc.
+      // ✅ TODO 3: Set up time using configTime(), localtime_r(), etc.
       lcd.clear();
       lcd.setCursor(0, 0);
       lcd.print("Time:");
