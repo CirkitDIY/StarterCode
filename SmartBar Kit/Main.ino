@@ -1,26 +1,41 @@
+// 📦 Required Libraries
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <LiquidCrystal_I2C.h>
+#include <ArduinoJson.h>
+#include <Wire.h>
+#include <time.h>  
 
-// 🧠 STEP 1: Fill in your Wi-Fi credentials
+// 🔌 Step 1: Add your Wi-Fi credentials
 const char* ssid = "YOUR_WIFI_NAME";
 const char* password = "YOUR_WIFI_PASSWORD";
 
-LiquidCrystal_I2C lcd(0x27, 16, 2);  // 16 chars, 2 rows
+// 🌤️ Step 2: Add your WeatherAPI key and location
+const char* apiKey = "YOUR_API_KEY_HERE";   // Get this from https://weatherapi.com
+const char* city = "YOUR_CITY";             // Example: "austin"
 
+// 📟 LCD Setup (I2C address, 16 chars, 2 lines)
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+// 🕒 Set weather refresh interval (e.g., every 10 seconds)
 const long updateInterval = 10000;
 unsigned long lastUpdate = 0;
+
+// 🌐 NTP Time config (for Part 2)
+const char* ntpServer = "pool.ntp.org";
+const long gmtOffset_sec = -5 * 3600;        // Adjust for your timezone (example: GMT-5)
+const int daylightOffset_sec = 0;            // Optional: daylight savings
 
 void setup() {
   Serial.begin(115200);
 
-  // Initialize LCD
+  // ✅ Step 3: Initialize LCD
   lcd.init();
   lcd.backlight();
   lcd.clear();
   lcd.print("Connecting WiFi");
 
-  // Connect to Wi-Fi
+  // ✅ Step 4: Connect to WiFi
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
@@ -31,6 +46,9 @@ void setup() {
   lcd.print("WiFi connected!");
   delay(1000);
   lcd.clear();
+
+  // 🕒 Step 5 (Part 2): Configure NTP time
+  configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
 }
 
 void loop() {
@@ -38,57 +56,44 @@ void loop() {
     lastUpdate = millis();
 
     if (WiFi.status() == WL_CONNECTED) {
-      // ✅ TODO 1: Make an API request to WeatherAPI.com
-      // 1. Go to https://www.weatherapi.com/
-      // 2. Sign up and get your free API key
-      // 3. Construct a URL like:
-      // http://api.weatherapi.com/v1/current.json?key=YOUR_KEY&q=YOUR_CITY&aqi=no
-      //
-      // Example:
-      // HTTPClient http;
-      // http.begin("http://api.weatherapi.com/v1/current.json?key=...&q=...&aqi=no");
-      // int code = http.GET();
-      // parse response...
+      // 🌤️ PART 1: Fetch Weather Data
+      // TODO: Construct the URL using your API key and city
+      // Example: http://api.weatherapi.com/v1/current.json?key=...&q=...&aqi=no
 
-      // ✅ TODO 2: Use ArduinoJson to parse the JSON response
-      // Extract "temp_f" and "condition.text"
-      // Show them on the LCD
+      // TODO: Use HTTPClient to send a GET request
 
-      // 📟 Placeholder display
-      lcd.clear();
-      lcd.setCursor(0, 0);
-      lcd.print("Weather:");
-      lcd.setCursor(0, 1);
-      lcd.print("Sunny 75F");  // Replace this with real data
-      delay(3000);
+      // TODO: Use ArduinoJson to parse the response
+      // Extract: "temp_f" and "condition.text"
 
-      // 🕒 BONUS: Show current time and date using NTP
-      // ✅ TODO 3: Set up time using configTime(), localtime_r(), etc.
-      lcd.clear();
-      lcd.setCursor(0, 0);
-      lcd.print("Time:");
-      lcd.setCursor(0, 1);
-      lcd.print("00:00:00");  // Replace with real time
-      delay(3000);
+      // TODO: Display the temperature and weather condition on the LCD
+      // Use lcd.setCursor(x, y) and lcd.print()
+
+      // Optional: Add delay(2500) between displays
+
+      // ⏰ PART 2: Show Time & Date
+      // TODO: Use time(nullptr), localtime_r() to get current time
+      // TODO: Format time as HH:MM:SS and date as MM/DD/YYYY
+      // TODO: Display time and date on LCD
+
     } else {
+      // 🚫 Wi-Fi Disconnected
       lcd.clear();
       lcd.print("WiFi lost...");
     }
   }
 }
 
-
 /*
-🎯 Going further:
+📘 GOING FURTHER (BONUS):
 
-This is just the beginning. Once you're done with the basics, we recommend going beyond this!
+Try displaying:
+- 📈 Live stock prices
+- 🔧 3D printer print status
+- 📦 Home automation sensor data
+- or any other ideas you have!
 
-🔌 You can connect and display:
-- Live stock prices
-- Your 3D printer's live print status
-- Smart home data
-- And so much more...
+🔧 You can switch displays every few seconds and build your own dashboard!
 
-📣 Show off what you've made in our Discord's #showcase channel, and don’t hesitate to ask questions in the respective channels!
-
+📣 Need help or want to share your build?
+Join our Discord and post in #showcase!
 */
